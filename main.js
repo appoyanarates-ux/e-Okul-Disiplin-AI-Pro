@@ -7,7 +7,10 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Configure autoUpdater
-autoUpdater.autoDownload = false; // We'll ask the user before downloading
+autoUpdater.autoDownload = false;
+autoUpdater.logger = console;
+
+console.log('Uygulama başlatılıyor...');
 
 function createWindow() {
   const win = new BrowserWindow({
