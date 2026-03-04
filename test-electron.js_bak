@@ -1,0 +1,7 @@
+import { app, BrowserWindow } from "electron";
+app.whenReady().then(() => {
+    console.log("Electron test is ready!");
+    const win = new BrowserWindow();
+    win.loadURL("https://google.com");
+    setTimeout(() => app.quit(), 5000);
+});

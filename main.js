@@ -1,7 +1,8 @@
-import { app, BrowserWindow, dialog } from "electron";
+import { app, BrowserWindow, dialog, Menu } from "electron";
 import path from "path";
 import { fileURLToPath } from "url";
-import { autoUpdater } from "electron-updater";
+import pkg from "electron-updater";
+const { autoUpdater } = pkg;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -24,6 +25,9 @@ function createWindow() {
     }
   });
 
+  // Varsayılan menü çubuğunu tamamen kaldırır (File, Edit vb.)
+  Menu.setApplicationMenu(null);
+
   win.loadFile(path.join(__dirname, "dist/index.html"));
 
   // Ensure focus when restored from taskbar
@@ -35,12 +39,18 @@ function createWindow() {
 
   // Check for updates
   win.once('ready-to-show', () => {
+    console.log('Güncelleme kontrolü başlatılıyor...');
     autoUpdater.checkForUpdatesAndNotify();
   });
 }
 
 // Auto-updater Events
+autoUpdater.on('checking-for-update', () => {
+  console.log('Güncelleme kontrol ediliyor...');
+});
+
 autoUpdater.on('update-available', (info) => {
+  console.log('Güncelleme mevcut:', info.version);
   dialog.showMessageBox({
     type: 'info',
     title: 'Güncelleme Mevcut',
@@ -48,12 +58,18 @@ autoUpdater.on('update-available', (info) => {
     buttons: ['Evet', 'Sonra']
   }).then((result) => {
     if (result.response === 0) {
+      console.log('Güncelleme indirilmesi onaylandı.');
       autoUpdater.downloadUpdate();
     }
   });
 });
 
-autoUpdater.on('update-downloaded', () => {
+autoUpdater.on('update-not-available', (info) => {
+  console.log('Güncelleme mevcut değil. Mevcut sürüm güncel:', info.version);
+});
+
+autoUpdater.on('update-downloaded', (info) => {
+  console.log('Güncelleme indirildi:', info.version);
   dialog.showMessageBox({
     type: 'info',
     title: 'Güncelleme Hazır',

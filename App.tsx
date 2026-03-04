@@ -1,7 +1,5 @@
-
-import React, { useState } from 'react';
+import React from 'react';
 import { HashRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { Menu } from 'lucide-react';
 import Sidebar from './components/Sidebar';
 import Dashboard from './components/Dashboard';
 import IncidentLog from './components/IncidentLog';
@@ -19,28 +17,14 @@ import { SettingsProvider } from './context/SettingsContext';
 import { IncidentProvider } from './context/IncidentContext';
 
 const App = () => {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
   return (
     <StudentProvider>
       <IncidentProvider>
         <SettingsProvider>
           <HashRouter>
             <div className="flex bg-[#f3f4f6] min-h-screen font-sans">
-              {/* Mobile Header */}
-              <div className="lg:hidden fixed top-0 left-0 right-0 h-16 bg-slate-900 text-white flex items-center justify-between px-4 z-30 shadow-md">
-                <div className="font-bold text-lg tracking-tight">e-Okul Disiplin</div>
-                <button
-                  onClick={() => setIsMobileMenuOpen(true)}
-                  className="p-2 hover:bg-slate-800 rounded-lg transition-colors"
-                >
-                  <Menu className="w-6 h-6" />
-                </button>
-              </div>
-
-              <Sidebar isOpen={isMobileMenuOpen} setIsOpen={setIsMobileMenuOpen} />
-
-              <div className="flex-1 lg:ml-64 pt-16 lg:pt-0 transition-all duration-300 w-full">
+              <Sidebar />
+              <div className="flex-1 ml-64 transition-all duration-300">
                 <Routes>
                   <Route path="/" element={<Dashboard />} />
                   <Route path="/students" element={<Students />} />
